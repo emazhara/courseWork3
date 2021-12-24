@@ -37,6 +37,7 @@ public class Vector {
             result += this.coordinates[i] * operand.coordinates[i];
         return result;
     }
+    //this method returns the number of coordinate if tha argument is in vector's coordinates and -1 otherwise
     public int isIncluded(double number){
         for(int i = 0; i < this.dimension; i++)
             if(this.coordinates[i] == number)

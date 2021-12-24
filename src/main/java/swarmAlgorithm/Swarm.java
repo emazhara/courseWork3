@@ -11,7 +11,7 @@ public class Swarm {
         for(int i = 0; i < agentsCount; i++){
             long seed = System.currentTimeMillis();
             this.particles[i] = new Agent(seed, i, freeParameters);
-            this.particles[i].setNeighbours(agentsCount);
+            this.particles[i].setNeighbours(freeParameters);
         }
     }
 

@@ -12,7 +12,9 @@ public class FreeParameters {
     public double cognitiveComponent; //free parameters of newPosition() method
     public double socialComponent;
     public int maximumIterationsNumber; //once iteration count gets over maximumIterationsNumber the algorithm stops its work
+    public int stagnationLimit; //once stagnation counter gets over stagnationLimit the algorithm stops its work
     public int multiStartNumber; //amount of start method calls
+    public int topologyType; //type of topology used for filling array of neighbours for each particle
 
     public FreeParameters() throws NoSuchElementException {
         Scanner scanner = new Scanner(System.in);
@@ -36,8 +38,13 @@ public class FreeParameters {
         this.cognitiveComponent = scanner.nextDouble();
         System.out.print("Insert social component\n" + "Social component: ");
         this.socialComponent = scanner.nextDouble();
+        System.out.print("Insert the number of the topology you wish to select:\n" +
+                "1. Ring topology\n2. Clique topology\n3. Torus topology\n4. Claster topology\n");
+        topologyType = scanner.nextInt();
         System.out.print("Insert maximum number of algorithm iterations\n" + "Maximum number of iterations: ");
         this.maximumIterationsNumber = scanner.nextInt();
+        System.out.print("Insert needed number of iterations while stagnation of the process\n" + "Stagnation limit: ");
+        this.stagnationLimit = scanner.nextInt();
         System.out.print("Insert number of algorithm starts\n" + "Multi start executions number: ");
         this.multiStartNumber = scanner.nextInt();
     }

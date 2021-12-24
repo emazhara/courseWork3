@@ -38,29 +38,24 @@ public class Agent {
         return result;
     }
 
-    public void setNeighbours(int agentsCount) throws Exception {
-        int topologyType;
-        System.out.print("Insert the number of the topology you wish to select:\n" +
-                        "1. Ring topology\n2. Clique topology\n3. Torus topology\n4. Claster topology\n");
-        Scanner scanner = new Scanner(System.in);
-        topologyType = scanner.nextInt();
-        switch (topologyType) {
+    public void setNeighbours(FreeParameters freeParameters) throws Exception {
+        switch (freeParameters.topologyType) {
             case Topology.RING:
                 RingTopology ringTopology = new RingTopology();
-                ringTopology.agentNeighbourhood(this, agentsCount);
+                ringTopology.agentNeighbourhood(this, freeParameters.agentsCount);
                 break;
             case Topology.CLIQUE:
                 CliqueTopology cliqueTopology = new CliqueTopology();
-                cliqueTopology.agentNeighbourhood(this, agentsCount);
+                cliqueTopology.agentNeighbourhood(this, freeParameters.agentsCount);
                 break;
             case Topology.TORUS:
-                TorusTopology torusTopology = new TorusTopology(agentsCount);
-                torusTopology.agentNeighbourhood(this, agentsCount);
+                TorusTopology torusTopology = new TorusTopology(freeParameters.agentsCount);
+                torusTopology.agentNeighbourhood(this, freeParameters.agentsCount);
                 break;
             case Topology.CLASTER:
-                ClasterTopology clasterTopology = new ClasterTopology(agentsCount);
+                ClasterTopology clasterTopology = new ClasterTopology(freeParameters.agentsCount);
                 clasterTopology.generateCliqueConnectionVertexes();
-                clasterTopology.agentNeighbourhood(this, agentsCount);
+                clasterTopology.agentNeighbourhood(this, freeParameters.agentsCount);
             default:
                 throw new Exception("Topology with such a number does not exist\n");
         }

@@ -4,17 +4,10 @@ import swarmAlgorithm.Agent;
 import java.util.Scanner;
 
 public class TorusTopology implements Topology {
-    int torusSize;
+    public int torusSize;
 
-    public TorusTopology(int agentsCount){
-        System.out.print("For this topology you have to insert the size of the torus\n");
-        Scanner scanner = new Scanner(System.in);
-        int torusSize = scanner.nextInt();
-        while(agentsCount % torusSize != 0) {
-            System.out.print("Agents amount = " + agentsCount + " cannot be divided by the size of torus = "
-                    + torusSize + "\n");
-            torusSize = scanner.nextInt();
-        }
+    public TorusTopology(int torusSize){
+        this.torusSize = torusSize;
     }
 
     @Override

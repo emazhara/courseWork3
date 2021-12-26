@@ -6,7 +6,7 @@ public class StartAlgorithm implements Runnable{
     public FreeParameters freeParameters;
     public double overallBestFitnessFunctionValue;
     private int stagnationCounter;
-    private int iterationCounter;
+    public int iterationCounter;
 
     public StartAlgorithm(FreeParameters freeParameters){
         this.freeParameters = freeParameters;
@@ -22,8 +22,8 @@ public class StartAlgorithm implements Runnable{
             double[] allFitnessFunctionValues = new double[this.freeParameters.agentsCount];
             for(this.iterationCounter = 0; this.iterationCounter < freeParameters.maximumIterationsNumber; this.iterationCounter++){
                 if(this.stagnationCounter >= this.freeParameters.stagnationLimit) {
-                    System.out.print("Process finished because of stagnation\n");
-                    System.out.print("Iterations: " + this.iterationCounter);
+                    /*System.out.print("Process finished because of stagnation\n");
+                    System.out.print("Iterations: " + this.iterationCounter);*/
                     return;
                 }
                 swarm.nextIteration(this.freeParameters);
@@ -38,7 +38,7 @@ public class StartAlgorithm implements Runnable{
                 else
                     this.stagnationCounter++;
             }
-            System.out.print("Iterations: " + this.iterationCounter + "\n");
+            //System.out.print("Iterations: " + this.iterationCounter + "\n");
         }
         catch (Exception exception) {
             exception.printStackTrace();

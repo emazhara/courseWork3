@@ -33,14 +33,17 @@ public class Agent {
 
     public double getFitnessFunctionValue(Vector X) {
         double result = 0;
-        int radius = 5;
-        //реализация данного метода зависит от оптимизируемой функции
-        for(int i = 0; i < X.dimension; i++)
-            result += X.coordinates[i] * X.coordinates[i];
-        /*for(int i = 0; i < X.dimension; i++)
-            result -= X.coordinates[i] * X.coordinates[i];
-        result += radius * radius;
-        result = -Math.sqrt(result);*/
+        double tmp = 0;
+        double tmp2 = 0;
+        for(int i = 0; i < X.dimension; i++) {
+            tmp += X.coordinates[i] * X.coordinates[i];
+            tmp2 += Math.cos(2*Math.PI*X.coordinates[i]);
+        }
+        tmp /= X.dimension;
+        tmp2 /= X.dimension;
+        result = -20 * Math.exp(-0.2 * Math.sqrt(tmp));
+        result -= Math.exp(tmp2);
+        result += 20 + Math.exp(1);
         return result;
     }
 
@@ -56,13 +59,13 @@ public class Agent {
                 cliqueTopology.agentNeighbourhood(this, freeParameters.agentsCount);
                 break;
             case Topology.TORUS:
-                TorusTopology torusTopology = new TorusTopology(freeParameters.agentsCount);
+                TorusTopology torusTopology = new TorusTopology(freeParameters.torusSize);
                 torusTopology.agentNeighbourhood(this, freeParameters.agentsCount);
                 break;
             case Topology.CLASTER:
-                ClasterTopology clasterTopology = new ClasterTopology(freeParameters.agentsCount);
-                clasterTopology.generateCliqueConnectionVertexes();
+                ClasterTopology clasterTopology = new ClasterTopology(freeParameters.agentsCount, freeParameters.cliquesCount);
                 clasterTopology.agentNeighbourhood(this, freeParameters.agentsCount);
+                break;
             default:
                 throw new Exception("Topology with such a number does not exist\n");
         }

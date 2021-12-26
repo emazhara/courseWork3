@@ -10,6 +10,7 @@ public class Interface {
         multiStart.multiStartRun();
         DecimalFormat df = new DecimalFormat("#.##########");
         df.setRoundingMode(RoundingMode.CEILING);
-        System.out.print("Minimum of the inserted function is " + df.format(multiStart.finalResult));
+        System.out.print("Minimum of the inserted function is " + df.format(multiStart.finalResult) + "\n");
+        System.out.print("The exact value of function minimum is " + multiStart.finalResult + "\n");
     }
 }

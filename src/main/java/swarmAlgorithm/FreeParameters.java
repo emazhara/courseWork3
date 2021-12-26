@@ -1,5 +1,6 @@
 package swarmAlgorithm;
 
+import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -18,16 +19,19 @@ public class FreeParameters {
 
     public FreeParameters() throws NoSuchElementException {
         Scanner scanner = new Scanner(System.in);
+        scanner.useLocale(Locale.US);
         System.out.print("Insert the number of agents - particles in the search area\n" + "Number of agents: ");
         this.agentsCount = scanner.nextInt();
         System.out.print("Insert the dimension of the search area\n" + "Dimension: ");
         this.dimension = scanner.nextInt();
         System.out.print("Insert minimum restrictions for each coordinate of particle position\n");
+        this.minimumRestrictions = new double[this.dimension];
         for(int i = 0; i < this.dimension; i++){
             System.out.print("Minimum restriction for " + (i+1) + " coordinate: ");
             this.minimumRestrictions[i] = scanner.nextDouble();
         }
         System.out.print("Insert maximum restrictions for each coordinate of particle position\n");
+        this.maximumRestrictions = new double[this.dimension];
         for(int i = 0; i < this.dimension; i++){
             System.out.print("Maximum restriction for " + (i+1) + " coordinate: ");
             this.maximumRestrictions[i] = scanner.nextDouble();

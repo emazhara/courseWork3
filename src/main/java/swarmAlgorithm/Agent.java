@@ -4,7 +4,6 @@ import swarmAlgorithm.topology.*;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
 
 public class Agent {
     public Vector currentPosition;
@@ -22,23 +21,31 @@ public class Agent {
         this.currentPosition = new Vector(freeParameters.dimension);
         this.velocity = new Vector(freeParameters.dimension);
         for (int i = 0; i < freeParameters.dimension; i++) {
-            double residue = freeParameters.maximumRestrictions[index] - freeParameters.minimumRestrictions[index];
-            this.currentPosition.coordinates[i] = random.nextDouble() * residue + freeParameters.minimumRestrictions[index];
+            double residue = freeParameters.maximumRestrictions[i] - freeParameters.minimumRestrictions[i];
+            this.currentPosition.coordinates[i] = random.nextDouble() * residue + freeParameters.minimumRestrictions[i];
             this.velocity.coordinates[i] = random.nextDouble() * 2 * residue - residue;
         }
-        bestFitnessFunctionArgument = currentPosition;
-        bestFitnessFunctionValue = getFitnessFunctionValue(currentPosition);
-        bestNeighbourPosition = null;
-        bestNeighbourFitnessFunctionValue = Double.MAX_VALUE;
+        this.bestFitnessFunctionArgument = this.currentPosition;
+        this.bestFitnessFunctionValue = getFitnessFunctionValue(this.currentPosition);
+        this.bestNeighbourPosition = this.currentPosition;
+        this.bestNeighbourFitnessFunctionValue = Double.MAX_VALUE;
     }
 
     public double getFitnessFunctionValue(Vector X) {
         double result = 0;
+        int radius = 5;
         //реализация данного метода зависит от оптимизируемой функции
+        for(int i = 0; i < X.dimension; i++)
+            result += X.coordinates[i] * X.coordinates[i];
+        /*for(int i = 0; i < X.dimension; i++)
+            result -= X.coordinates[i] * X.coordinates[i];
+        result += radius * radius;
+        result = -Math.sqrt(result);*/
         return result;
     }
 
     public void setNeighbours(FreeParameters freeParameters) throws Exception {
+        this.neighbours = new ArrayList<>();
         switch (freeParameters.topologyType) {
             case Topology.RING:
                 RingTopology ringTopology = new RingTopology();
@@ -62,22 +69,27 @@ public class Agent {
     }
 
     public void nextPosition(FreeParameters freeParameters) throws Exception {
-        Random random = new Random();
-        Vector newVelocity = new Vector(this.currentPosition.dimension);
-        newVelocity.sum(this.velocity.scalarMultiplication(freeParameters.inertialComponent)).sum(this.bestFitnessFunctionArgument.
-                sum(this.currentPosition.scalarMultiplication(-1)).scalarMultiplication(freeParameters.cognitiveComponent).
-                scalarMultiplication(random.nextDouble())).sum(this.bestNeighbourPosition.sum(this.currentPosition.
-                scalarMultiplication(-1)).scalarMultiplication(freeParameters.socialComponent).scalarMultiplication(random.nextDouble()));
-        Vector newPosition = new Vector(this.currentPosition.dimension);
+        Random random = new Random(System.currentTimeMillis());
+        Vector newVelocity;
+        Vector inertion = this.velocity.scalarMultiplication(freeParameters.inertialComponent);
+        Vector cognition = this.currentPosition.scalarMultiplication(-1).sum(this.bestFitnessFunctionArgument).
+                scalarMultiplication(freeParameters.cognitiveComponent).scalarMultiplication(random.nextDouble());
+        Vector socialisation = this.currentPosition.scalarMultiplication(-1).sum(this.bestNeighbourPosition).
+                scalarMultiplication(freeParameters.socialComponent).scalarMultiplication(random.nextDouble());
+        newVelocity = inertion.sum(cognition).sum(socialisation);
+
+        Vector newPosition;
         newPosition = this.currentPosition.sum(newVelocity);
         for (int i = 0; i < newVelocity.dimension; i++) {
             if (newPosition.coordinates[i] > freeParameters.maximumRestrictions[i])
-                newPosition.coordinates[i] = freeParameters.maximumRestrictions[i];
+                newPosition.coordinates[i] = freeParameters.maximumRestrictions[i] -
+                        random.nextDouble() * (freeParameters.maximumRestrictions[i] - freeParameters.minimumRestrictions[i]);
             if (newPosition.coordinates[i] < freeParameters.minimumRestrictions[i])
-                newPosition.coordinates[i] = freeParameters.minimumRestrictions[i];
+                newPosition.coordinates[i] = freeParameters.minimumRestrictions[i] +
+                        random.nextDouble() * (freeParameters.maximumRestrictions[i] - freeParameters.minimumRestrictions[i]);
         }
         this.velocity = newVelocity;
-        this.currentPosition = this.currentPosition.sum(newVelocity);
+        this.currentPosition = newPosition;
     }
 
     public void privateGuideNextPosition() { //this function updates bestFitnessFunctionArgument and ...Value after nextPosition() was called

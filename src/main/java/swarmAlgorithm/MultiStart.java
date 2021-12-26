@@ -21,12 +21,13 @@ public class MultiStart{
             futureTasks[startNumber] = service.submit(()->{
                 StartAlgorithm running = new StartAlgorithm(freeParameters);
                 running.run();
-                finalResult += running.overallBestFitnessFunctionValue;
+                if(running.overallBestFitnessFunctionValue < this.finalResult){
+                    this.finalResult = running.overallBestFitnessFunctionValue;
+                }
             });
         }
         for(Future task:futureTasks){
             task.get();
         }
-        finalResult /= this.freeParameters.multiStartNumber;
     }
 }

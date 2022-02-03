@@ -21,7 +21,7 @@ public class ClasterTopology implements Topology {
                 particle.neighbours.add(i);
         }
         int thisCliqueNumber = particle.index / this.cliquesCount + 1;
-        int vertexNumber = particle.index % this.numberOfCliqueVertexes + 1; //номер частицы в клике именно в нумерации клики
+        int vertexNumber = particle.index % this.numberOfCliqueVertexes + 1; //number of vertex in clique counting only this cliques verteces
         if((vertexNumber <= this.cliquesCount) && (vertexNumber != thisCliqueNumber)){
             int neighbourIndex = (vertexNumber - 1) * this.numberOfCliqueVertexes + thisCliqueNumber - 1;
             particle.neighbours.add(neighbourIndex);
